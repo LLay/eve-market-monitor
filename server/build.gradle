@@ -27,6 +27,7 @@ targetCompatibility = 1.8
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("com.squareup.okhttp3:okhttp:3.2.0")
+    compile group: 'com.rethinkdb', name: 'rethinkdb-driver', version: '2.3.0'
     testCompile("junit:junit")
 }
 
