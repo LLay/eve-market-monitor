@@ -1,4 +1,4 @@
-package marketstat;
+package main;
 
 public class MarketStat {
   private final String content;

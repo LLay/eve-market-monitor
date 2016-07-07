@@ -1,6 +1,6 @@
-###build with
+###build the docker image with
 ```bash
-$ ./gradlew build
+$ ./gradlew build buildDocker
 ```
 ###run server on http://localhost:8080 with
 ```bash
