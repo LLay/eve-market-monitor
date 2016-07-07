@@ -23,5 +23,5 @@ $ docker run -p 8080:8080 -t llay/gs-rest-service
 ### access the server
 access at `http://localhost:8080`
 
-## Example endpoints
+## Example endpoint
 `http://localhost:8080/marketstat`
