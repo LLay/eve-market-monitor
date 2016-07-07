@@ -23,7 +23,7 @@ public class MarketStatController {
     return response.body().string();
   }
 
-  @RequestMapping("/app/marketstat")
+  @RequestMapping("/marketstat")
   public String marketstat() throws IOException {
     return run(url);
   }
