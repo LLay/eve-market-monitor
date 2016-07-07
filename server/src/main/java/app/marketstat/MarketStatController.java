@@ -12,7 +12,7 @@ import okhttp3.Response;
 public class MarketStatController {
 
   OkHttpClient client = new OkHttpClient();
-  public static String url = "http://api.eve-central.com/api/app.marketstat?typeid=34&typeid=35&regionlimit=10000002";
+  public static String url = "http://api.eve-central.com/api/marketstat?typeid=34&typeid=35&regionlimit=10000002";
 
   String run(String url) throws IOException {
     Request request = new Request.Builder()
@@ -23,7 +23,7 @@ public class MarketStatController {
     return response.body().string();
   }
 
-  @RequestMapping("/app/marketstat")
+  @RequestMapping("/marketstat")
   public String marketstat() throws IOException {
     return run(url);
   }

@@ -1,25 +1,27 @@
 ## Normal build (to be depricated)
-###build with
+### Build
 ```bash
 $ ./gradlew build
 ```
 
-###run server on http://localhost:8080 with
+### Run server on http://localhost:8080
 ```bash
 $ java -jar build/libs/gs-rest-service-0.1.0.jar
 ```
 
 ##Docker build
-#### (Incomplete)
-###build the docker image with
+### Build the docker image
 ```bash
 $ ./gradlew build buildDocker
 ```
 
-### run the docker image with
+### Run the docker container
 ```bash
-$ docker run llay/gs-rest-service
+$ docker run -p 8080:8080 -t llay/gs-rest-service
 ```
 
-### access the server (Not working)
-access at http://localhost:8080
+### access the server
+access at `http://localhost:8080`
+
+## Example endpoint
+`http://localhost:8080/marketstat`
