@@ -1,45 +1,25 @@
 package app.world;
 
-import com.rethinkdb.gen.ast.Json;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
-import java.io.IOException;
-import java.util.Set;
+import java.util.Map;
 
 /**
- *
+ * Created by amindenwebb on 2016-07-07.
  */
 public class World {
 
-    Set<SolarSystem> solarSystems;
-    Set<Region> regions;
+    private static World instance;
 
-    static final String solarSystemsUrl = "https://crest-tq.eveonline.com/solarsystems/";
-    OkHttpClient client = new OkHttpClient();
+    Map<String, SolarSystem> solarSystems;
+    Map<String, Region> regions;
 
-    private String fetchSolarSystemList() throws IOException {
-        Request request = new Request.Builder()
-                .url(solarSystemsUrl)
-                .build();
-
-        Response response = client.newCall(request).execute();
-        return response.body().string();
+    private World() {
     }
 
-    public void updateWorld() throws Exception {
-        this.updateSolarSystemList();
-    }
-
-    private void updateSolarSystemList() throws FailedUpdateException {
-        String rawData;
-        try {
-            rawData = this.fetchSolarSystemList();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new FailedUpdateException();
+    public static World getInstance() {
+        if (instance == null) {
+            instance = new World();
         }
+        return instance;
     }
 
 }
