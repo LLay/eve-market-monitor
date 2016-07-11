@@ -1,5 +1,6 @@
 package application;
 
+import com.rethinkdb.net.Cursor;
 import org.springframework.beans.factory.annotation.Autowired;
 import application.db.DataFeeder;
 import okhttp3.OkHttpClient;
@@ -13,36 +14,34 @@ import java.io.IOException;
 
 public class Poller {
 
-  @Autowired
-  DataFeeder dataFeeder;
-
   private TimerTask task;
   private long delay;
   private long period;
   private String url;
   private Timer timer;
-  private String table;
 
   public Poller(long delay, long period, String table, String url) {
     this.delay = delay;
     this.period = period;
-    this.table = table;
     this.url = url; // Probably make this a list at some point
-    this.task = new MyTimerTask(url);
+    this.task = new MyTimerTask(table, url);
     this.timer = new Timer();
   }
 
   class MyTimerTask extends TimerTask {
 
+    String table;
     Request request;
     OkHttpClient client = new OkHttpClient();
 
-    MyTimerTask(String url) {
+    MyTimerTask(String table, String url) {
+      this.table = table;
       this.request = new Request.Builder().url(url).build();
     }
 
     private void completeTask() {
       try {
+        DataFeeder dataFeeder = new DataFeeder();
         String response = client.newCall(this.request).execute().body().string();
         dataFeeder.feed(table, response);
         System.out.println(response);

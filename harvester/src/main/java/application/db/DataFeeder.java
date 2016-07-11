@@ -1,6 +1,7 @@
 package application.db;
 
 import com.rethinkdb.RethinkDB;
+import com.rethinkdb.net.Cursor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -9,29 +10,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class DataFeeder {
 
-  @Autowired
-  DataManager dataManager;
-
-  @Autowired
-  JSONParser jsonParser;
-
-
-  public void DataFeeder(String db) {
-
-  }
-
   public void feed(String table, String data) {
+    DataManager dataManager = new DataManager();
     JSONObject commodity = parse(data);
 
     RethinkDB connector = dataManager.connect();
+    // This is a lot of hard-coded shit
+//    dataManager.createTable(table);
     connector.table(table).insert(commodity);
+    dataManager.printTable(table);
 
     dataManager.close();
   }
 
   public JSONObject parse(String data) {
     try {
-      JSONArray dataArray = (JSONArray) jsonParser.parse(data);
+      JSONParser parser = new JSONParser();
+      JSONArray dataArray = (JSONArray) parser.parse(data);
       JSONObject commodity = (JSONObject) dataArray.get(0);
       return commodity;
     } catch (ParseException e) {
