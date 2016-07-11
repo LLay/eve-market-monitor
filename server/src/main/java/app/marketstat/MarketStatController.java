@@ -1,8 +1,4 @@
-<<<<<<< HEAD:server/src/main/java/marketstat/MarketStatController.java
-package main;
-=======
 package app.marketstat;
->>>>>>> master:server/src/main/java/app/marketstat/MarketStatController.java
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
