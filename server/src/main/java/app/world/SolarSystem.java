@@ -4,6 +4,7 @@ import com.rethinkdb.RethinkDB;
 import com.rethinkdb.model.MapObject;
 import org.json.simple.JSONObject;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +14,6 @@ import java.util.Map;
  */
 public class SolarSystem implements WorldPlace {
 
-    int x;
-    int y;
-    int z;
-
     String id;
     String name;
 
@@ -24,6 +21,11 @@ public class SolarSystem implements WorldPlace {
 
     List<String> stations;
     List<String> gates;
+    String securityStatus;
+
+    BigDecimal x;
+    BigDecimal y;
+    BigDecimal z;
 
 
     public SolarSystem(String id, String name) {
@@ -31,12 +33,12 @@ public class SolarSystem implements WorldPlace {
         this.name = name;
     }
 
-    public void setDetails(int x, int y, int z, List<String> stations, List<String> gates) {
+    public void setDetails(String x, String y, String z, List<String> stations, List<String> gates) {
         this.stations = stations;
         this.gates = gates;
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.x = new BigDecimal(x);
+        this.y = new BigDecimal(y);
+        this.z = new BigDecimal(z);
         this.sparse = false;
     }
 
@@ -57,7 +59,7 @@ public class SolarSystem implements WorldPlace {
 
         if (!sparse) {
             return baseMap
-                    .with("position", Arrays.asList(new int[]{x, y, z}))
+                    .with("position", Arrays.asList(new String[]{x.toString(), y.toString(), z.toString()}))
                     .with("stations", stations)
                     .with("gates", gates);
         }
