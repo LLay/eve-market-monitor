@@ -1,4 +1,4 @@
-package app.db;
+package app.dbclient;
 
 import com.rethinkdb.RethinkDB;
 import com.rethinkdb.net.Connection;

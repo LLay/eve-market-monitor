@@ -6,4 +6,5 @@ package app.world;
 public interface WorldPlace {
     String getName();
     String getId();
+    // WorldPlaceType getType();
 }

@@ -1,5 +1,6 @@
-package app.world;
+package app.crestclient;
 
+import app.world.SolarSystem;
 import com.rethinkdb.RethinkDB;
 import com.rethinkdb.gen.exc.ReqlOpFailedError;
 import com.rethinkdb.net.Connection;
@@ -14,7 +15,7 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 
 /**
- *
+ *  Responsible for updating the Database with world data from the EVE CREST API.
  */
 public class WorldUpdater {
 
@@ -38,13 +39,16 @@ public class WorldUpdater {
     }
 
     public void updateWorldData() throws FailedUpdateException {
+        prepareDb();
         updateSolarSystemList();
         // Then add any new solar systems to db
     }
 
-    private void updateSolarSystemList() throws FailedUpdateException {
-        prepareDb();
+    public void updateRegionList() throws FailedUpdateException {
 
+    }
+
+    private void updateSolarSystemList() throws FailedUpdateException {
         try {
             this.items = fetchSolarSystemList();
             for (Object system : items) {
@@ -80,6 +84,12 @@ public class WorldUpdater {
             r.db(dbName).tableCreate(solarSystemTableName).run(conn);
         } catch (ReqlOpFailedError e) {
             System.err.println("Error.  Table already exists? " + solarSystemTableName);
+        }
+
+        try {
+            r.db(dbName).tableCreate(regionTableName).run(conn);
+        } catch (ReqlOpFailedError e) {
+            System.err.println("Error.  Table already exists? " + regionTableName);
         }
     }
 
