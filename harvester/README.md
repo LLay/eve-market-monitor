@@ -20,4 +20,4 @@ $ ./gradlew build buildDocker
 $ docker run llay/gs-rest-service
 ```
 ## TODO
-remokve SpringApplication.run(Application.class, args)? from application.java main?
+remove SpringApplication.run(Application.class, args)? from application.java main?
