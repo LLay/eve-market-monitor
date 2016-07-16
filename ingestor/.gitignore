@@ -1,4 +1,4 @@
 build/
 .gradle/
 
-rethink_data/
+rethinkdb_data/

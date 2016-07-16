@@ -8,7 +8,7 @@ import org.json.simple.JSONObject;
 import java.io.IOException;
 
 /**
- * A
+ * TODO
  */
 public class RethinkClient {
 
@@ -22,6 +22,7 @@ public class RethinkClient {
   */
   public RethinkClient(Integer port, String username) {
     this.r = RethinkDB.r;
+    // TODO wrap a timeout around this. should error out if port it not available
     this.conn = r.connection().hostname("localhost").port(port).connect();
     this.username = username;
   }
@@ -47,8 +48,7 @@ public class RethinkClient {
     }
   }
 
-  // public void insertData(String dbName, String tableName, Object data) {
-  public void insertData(String dbName, String tableName, String data) {
+  public void insertData(String dbName, String tableName, Object data) {
     this.r.db(dbName).table(tableName).insert(
       this.r.hashMap("data", data)
       .with("username", this.username)
