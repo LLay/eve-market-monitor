@@ -1,12 +1,10 @@
 package app.polling;
 
-import java.util.Timer;
 import java.util.TimerTask;
 import java.io.IOException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.Call;
 import app.callback.*;
 
 /**
