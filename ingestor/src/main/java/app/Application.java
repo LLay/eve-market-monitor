@@ -9,7 +9,8 @@ public class Application {
     Poller poller = new Poller(0,
       10000,
       "https://crest-tq.eveonline.com/market/prices/",
-      new WriteToRethinkCallback("eve", "marketstat", "admin"));
+      new WriteToRethinkCallback("eve1", "marketstat1", 9090, "admin"));
     poller.poll();
+    System.out.println("app running");
   }
 }

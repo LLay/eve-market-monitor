@@ -23,7 +23,7 @@ public class RethinkClient {
   public RethinkClient(Integer port, String username) {
     this.r = RethinkDB.r;
     this.conn = r.connection().hostname("localhost").port(port).connect();
-    this.username = username
+    this.username = username;
   }
 
   // TODO Return reference to database?
@@ -47,11 +47,11 @@ public class RethinkClient {
     }
   }
 
-// TODO figure out username
-  public void insertData(String dbName, String tableName, String data) { // FIXME data is not String, JSON
+  // public void insertData(String dbName, String tableName, Object data) {
+  public void insertData(String dbName, String tableName, String data) {
     this.r.db(dbName).table(tableName).insert(
-      this.r.hashMap("text", data)
+      this.r.hashMap("data", data)
       .with("username", this.username)
-      .with("time", this.r.now())).run(this.conn);
+      .with("insertion-time", this.r.now())).run(this.conn);
   }
 }

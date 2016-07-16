@@ -13,9 +13,10 @@ public class WriteToRethinkCallback implements Callback {
   RethinkClient rc;
   String tableName;
   String dbName;
+  JSONParser jp = new JSONParser();
 
-  public WriteToRethinkCallback(String dbName, String tableName, String username) {
-    this.rc = new RethinkClient(28015, username); // TODO figure out user name
+  public WriteToRethinkCallback(String dbName, String tableName, Integer port, String username) {
+    this.rc = new RethinkClient(port, username); // TODO figure out user name
     this.dbName = dbName;
     this.tableName = tableName;
 
@@ -26,9 +27,13 @@ public class WriteToRethinkCallback implements Callback {
   public void call(Response response) {
     try {
       this.rc.insertData(this.dbName, this.tableName, response.body().string());
+      // this.rc.insertData(this.dbName, this.tableName, jp.parse(response.body().string()));
     } catch (IOException e) {
       System.err.println("Error inserting data into database");
       e.printStackTrace();
+    // } catch (ParseException pe) {
+    //   System.err.println("Error parsing response");
+    //   pe.printStackTrace();
     }
   }
 }
