@@ -11,17 +11,21 @@ import java.io.IOException;
 public class WriteToRethinkCallback implements Callback {
 
   RethinkClient rc;
+  String tableName;
+  String dbName;
 
-  public WriteToRethinkCallback() {
+  public WriteToRethinkCallback(String dbName, Strinng tableName) {
     this.rc = new RethinkClient(28015);
+    this.dbName = dbName;
+    this.tableName = tableName;
 
-    this.rc.createDatabase("eve");
-    this.rc.createTable("eve", "marketstat");
+    this.rc.createDatabase(this.dbName);
+    this.rc.createTable(this.dbName, this.tableName);
   }
 
   public void call(Response response) {
     try {
-      this.rc.insertData("eve", "marketstat", response.body().string());
+      this.rc.insertData(this.dbName, this.tableName, response.body().string());
     } catch (IOException e) {
       System.err.println("Error inserting data into database");
       e.printStackTrace();
