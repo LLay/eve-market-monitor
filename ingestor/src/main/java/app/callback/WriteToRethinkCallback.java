@@ -14,8 +14,8 @@ public class WriteToRethinkCallback implements Callback {
   String tableName;
   String dbName;
 
-  public WriteToRethinkCallback(String dbName, Strinng tableName) {
-    this.rc = new RethinkClient(28015);
+  public WriteToRethinkCallback(String dbName, String tableName, String username) {
+    this.rc = new RethinkClient(28015, username); // TODO figure out user name
     this.dbName = dbName;
     this.tableName = tableName;
 

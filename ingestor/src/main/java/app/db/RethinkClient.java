@@ -7,17 +7,23 @@ import org.json.simple.JSONObject;
 
 import java.io.IOException;
 
+/**
+ * A
+ */
 public class RethinkClient {
 
   private RethinkDB r;
   private Connection conn;
+  private String username;
+  // Store map of databases and their tables?
 
   /**
   * @param port the port number associated with the new rethink instance
   */
-  public RethinkClient(Integer port) {
+  public RethinkClient(Integer port, String username) {
     this.r = RethinkDB.r;
     this.conn = r.connection().hostname("localhost").port(port).connect();
+    this.username = username
   }
 
   // TODO Return reference to database?
@@ -45,7 +51,7 @@ public class RethinkClient {
   public void insertData(String dbName, String tableName, String data) { // FIXME data is not String, JSON
     this.r.db(dbName).table(tableName).insert(
       this.r.hashMap("text", data)
-      .with("username", "llay")
+      .with("username", this.username)
       .with("time", this.r.now())).run(this.conn);
   }
 }
