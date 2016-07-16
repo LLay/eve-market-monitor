@@ -203,3 +203,6 @@ gradle-app.setting
 
 ### Lyon's weird linux stuff ###
 setfromspec/
+
+### Intellij Stuff ###
+*.iml

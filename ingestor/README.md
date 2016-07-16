@@ -1,15 +1,20 @@
 ## Normal build (to be depricated)
-###build with
+### Build
 ```bash
 $ ./gradlew build
 ```
 
-###run injest with
+### RethinkDB
+```bash
+$ ./rethinkdb --http-port 9090
+```
+
+### Run injest
 ```bash
 $ java -jar build/libs/gs-rest-service-0.1.0.jar
 ```
 
-##Docker build
+##Docker build (incomplete)
 ###build the docker image with
 ```bash
 $ ./gradlew build buildDocker
@@ -20,4 +25,4 @@ $ ./gradlew build buildDocker
 $ docker run llay/gs-rest-service
 ```
 ## TODO
-remokve SpringApplication.run(Application.class, args)? from application.java main?
+remove SpringApplication.run(Application.class, args)? from application.java main?
