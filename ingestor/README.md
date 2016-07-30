@@ -6,7 +6,7 @@ $ ./gradlew build
 
 ### RethinkDB
 ```bash
-$ ./rethinkdb --http-port 9090
+$ rethinkdb --http-port 9090
 ```
 
 ### Run injest
