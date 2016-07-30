@@ -6,7 +6,7 @@ $ ./gradlew build
 
 ### Run server on http://localhost:8080
 ```bash
-$ java -jar build/libs/gs-rest-service-0.1.0.jar
+$ java -jar build/libs/emm-server-0.1.0.jar
 ```
 
 ##Docker build
@@ -17,7 +17,7 @@ $ ./gradlew build buildDocker
 
 ### Run the docker container
 ```bash
-$ docker run -p 8080:8080 -t llay/gs-rest-service
+$ docker run -p 8080:8080 -t llay/emm-server
 ```
 
 ### access the server
