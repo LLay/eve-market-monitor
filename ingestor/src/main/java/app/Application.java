@@ -9,7 +9,7 @@ public class Application {
     Poller poller = new Poller(0,
       10000,
       "https://crest-tq.eveonline.com/market/prices/",
-      new WriteToRethinkCallback("eve", "market-prices", 28015, "admin"));
+      new WriteToRethinkCallback("eve", "marketprices", 28015, "admin"));
     poller.poll();
   }
 }
