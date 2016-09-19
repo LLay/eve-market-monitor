@@ -17,8 +17,8 @@ apply plugin: 'spring-boot'
 apply plugin: 'docker'
 
 jar {
-    baseName = 'emm-server'
-    version =  '0.1.0'
+  baseName = 'emm-server'
+  version =  '0.1.0'
 }
 
 repositories {

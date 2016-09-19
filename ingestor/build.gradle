@@ -1,11 +1,10 @@
 buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.5.RELEASE")
-        classpath('se.transmode.gradle:gradle-docker:1.2')
-    }
+		repositories {
+				mavenCentral()
+		}
+		dependencies {
+				classpath('se.transmode.gradle:gradle-docker:1.2')
+		}
 }
 
 group = 'llay'
@@ -13,40 +12,44 @@ group = 'llay'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: 'spring-boot'
 apply plugin: 'docker'
 
 jar {
-    baseName = 'emm-ingestor'
-    version =  '0.1.0'
+	baseName = 'emm-ingestor'
+	version =	'0.1.0'
+	manifest { // TODO figure out how to make docker run this shit
+		attributes(
+			'Class-Path': 'src/main/java/app/Application.java',
+      'Main-Class': 'Application'
+		)
+	}
 }
 
 repositories {
-    mavenCentral()
+		mavenCentral()
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("com.squareup.okhttp3:okhttp:3.2.0")
-    compile group: 'com.rethinkdb', name: 'rethinkdb-driver', version: '2.3.0'
-    testCompile("junit:junit")
+		compile("com.squareup.okhttp3:okhttp:3.2.0")
+		compile group: 'com.rethinkdb', name: 'rethinkdb-driver', version: '2.3.0'
+		testCompile("junit:junit")
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+		gradleVersion = '2.3'
 }
 
 task buildDocker(type: Docker, dependsOn: build) {
-  push = false
-  applicationName = jar.baseName
-  dockerfile = file('Dockerfile')
-  doFirst {
-    copy {
-      from jar
-      into stageDir
-    }
-  }
+	push = false
+	applicationName = jar.baseName
+	dockerfile = file('Dockerfile')
+	doFirst {
+		copy {
+			from jar
+			into stageDir
+		}
+	}
 }
