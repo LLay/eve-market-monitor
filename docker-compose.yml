@@ -1,0 +1,31 @@
+# Usage:
+
+version: '2'
+
+services:
+  database:
+    build: ./server
+    image: emm-database
+    volumes:
+      - rethink-data-volume:/var/lib/rethinkdb_data
+
+  server:
+    build: ./server
+    image: emm-server
+    links:
+      - database
+
+  ingestor:
+    build: ./ingestor
+    image: emm-ingestor
+    expose:
+      - 9090
+      - 28015
+    ports:
+      - 9090:9090 # 8080?
+      - 28015:28015
+    links:
+      - database
+
+volumes:
+  rethink-data-volume: # It creates this volume. Is is on the host too? will rethink know how to use it?
