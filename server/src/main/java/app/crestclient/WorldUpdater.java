@@ -1,16 +1,13 @@
 package app.crestclient;
 
-import app.world.SolarSystem;
+import app.world.WorldPlaceType;
 import com.rethinkdb.RethinkDB;
 import com.rethinkdb.gen.exc.ReqlOpFailedError;
 import com.rethinkdb.net.Connection;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.springframework.util.concurrent.ListenableFuture;
 
 import java.io.IOException;
 
@@ -20,57 +17,39 @@ import java.io.IOException;
 public class WorldUpdater {
 
     private static final String solarSystemsUrl = "https://crest-tq.eveonline.com/solarsystems/";
-    private static final String solarSystemTableName = "solar_systems";
+    private static final String solarSystemTableName = "solarsystems";
+    private static final String constellationTableName = "constellations";
     private static final String regionTableName = "regions";
+    private static final String gateTableName = "stargates";
     private static final String dbName = "world";
 
     private final RethinkDB r = RethinkDB.r;
     private OkHttpClient client = new OkHttpClient();
     private Connection conn = r.connection().hostname("localhost").port(28015).connect();
-    private JSONArray items;
-
-    private JSONArray fetchSolarSystemList() throws IOException, ParseException {
-        Request request = new Request.Builder()
-                .url(solarSystemsUrl)
-                .build();
-
-        Response response = client.newCall(request).execute();
-        return toJsonArray(response.body().string());
-    }
 
     public void updateWorldData() throws FailedUpdateException {
-        prepareDb();
-        updateSolarSystemList();
-        // Then add any new solar systems to db
+        this.prepareDb();
+        CrestWorldClient cwc = new CrestWorldClient();
+        this.updatePlaceList(cwc, WorldPlaceType.SolarSystem);
     }
 
-    public void updateRegionList() throws FailedUpdateException {
-
-    }
-
-    private void updateSolarSystemList() throws FailedUpdateException {
+    private void updatePlaceList(CrestWorldClient client, WorldPlaceType type) throws FailedUpdateException {
+        ListenableFuture<JSONArray> itemsFuture;
         try {
-            this.items = fetchSolarSystemList();
-            for (Object system : items) {
-                SolarSystem s = SolarSystem.initFromJson(system);
-                r.db(dbName).table(solarSystemTableName).insert(s.toRethinkMap()).run(conn);
-            }
+            itemsFuture = client.getWorldPlaceList(type);
+            itemsFuture.addCallback(items ->
+                {
+                    for (Object place : items) {
+                        JSONObject placeJson = (JSONObject) place;
+                        placeJson.get("id");
+                        r.db(dbName).table(this.getTableName(type)).insert(place).run(conn);
+                    }
+                }, items -> System.err.print("Could not get items from CREST API"));
         } catch (IOException e) {
             e.printStackTrace();
-            throw new FailedUpdateException();
-        } catch (ParseException e) {
-            e.printStackTrace();
-            System.err.println("Poop");
+            System.err.print("N000000");
             throw new FailedUpdateException();
         }
-    }
-
-    private JSONArray toJsonArray(String data) throws ParseException {
-        JSONParser jp = new JSONParser();
-        JSONObject o = (JSONObject) jp.parse(data);
-
-        int count = Integer.parseInt((String) o.get("totalCount_str"));
-        return (JSONArray) o.get("items");
     }
 
     private void prepareDb() {
@@ -90,6 +69,16 @@ public class WorldUpdater {
             r.db(dbName).tableCreate(regionTableName).run(conn);
         } catch (ReqlOpFailedError e) {
             System.err.println("Error.  Table already exists? " + regionTableName);
+        }
+    }
+
+    private String getTableName(WorldPlaceType type) {
+        switch(type) {
+            case SolarSystem: return solarSystemTableName;
+            case Constellation: return constellationTableName;
+            case Region: return regionTableName;
+            case Gate: return gateTableName;
+            default: return null;
         }
     }
 

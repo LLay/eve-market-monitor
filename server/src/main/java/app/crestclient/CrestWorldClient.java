@@ -1,6 +1,5 @@
 package app.crestclient;
 
-import app.world.SolarSystem;
 import app.world.WorldPlaceType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -11,9 +10,9 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
+import org.springframework.util.concurrent.ListenableFuture;
 
 import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -32,7 +31,7 @@ public class CrestWorldClient {
     private OkHttpClient client = new OkHttpClient();
 
     @Async
-    public Future<String> getRawWorldPlaceList(WorldPlaceType type) throws IOException {
+    public ListenableFuture<String> getRawWorldPlaceList(WorldPlaceType type) throws IOException {
         switch (type) {
             case SolarSystem:   return this.fetchData(solarSystemEndpoint);
             case Constellation: return this.fetchData(constellationsEndpoint);
@@ -42,17 +41,17 @@ public class CrestWorldClient {
     }
 
     @Async
-    public Future<JSONArray> getWorldPlaceList(WorldPlaceType type) throws IOException {
-        return this.getPlaceList(this.getRawWorldPlaceList(type));
+    public ListenableFuture<JSONArray> getWorldPlaceList(WorldPlaceType type) throws IOException {
+        return this.jsonStringToPlaceList(this.getRawWorldPlaceList(type));
     }
 
     @Async
-    private Future<String> fetchData(String endpoint) throws IOException {
+    private ListenableFuture<String> fetchData(String endpoint) throws IOException {
         return this.fetchData(endpoint, null);
     }
 
     @Async
-    private Future<String> fetchData(String endpoint, String args) throws IOException {
+    private ListenableFuture<String> fetchData(String endpoint, String args) throws IOException {
         if (args != null) {
             // do something
         } else {
@@ -73,7 +72,7 @@ public class CrestWorldClient {
      * @param data : JSON data
      * @return Array of JSONObjects representing places in the EVE world
      */
-    private Future<JSONArray> getPlaceList(Future<String> data) {
+    private ListenableFuture<JSONArray> jsonStringToPlaceList(Future<String> data) {
         JSONParser jp = new JSONParser();
         JSONObject o;
         try {
